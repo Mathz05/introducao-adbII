@@ -1,0 +1,111 @@
+DROP TABLE IF EXISTS pedidos;
+DROP TABLE IF EXISTS clientes;
+
+CREATE TABLE clientes (
+  id INTEGER PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  cidade VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE pedidos (
+  id INTEGER PRIMARY KEY,
+  client_id INTEGER NOT NULL,
+  valor FLOAT NOT NULL,
+  data DATE NOT NULL,
+  FOREIGN KEY (client_id) REFERENCES clientes(id)
+);
+
+INSERT INTO clientes (id, nome, cidade) VALUES
+(1, 'OTAVIO', 'Paranagua'),
+(2, 'Gabriel RJ', 'Rio de Janeiro'),
+(3, 'Gabriel BH', 'Belo Horizonte'),
+(4, 'Lucas', 'Antonina');
+
+INSERT INTO pedidos (id, client_id, valor, data) VALUES
+(1, 1, 150.00, '2023-01-15'),
+(2, 1, 90.00, '2023-02-10'),
+(3, 2, 300.00, '2023-03-05'),
+(4, 3, 50.00, '2023-04-12'),
+(5, 1, 120.00, '2023-06-01');
+
+SELECT * FROM pedidos WHERE valor > 100;
+
+SELECT * FROM clientes WHERE cidade = 'Paranagua';
+
+SELECT * FROM pedidos WHERE valor BETWEEN 100 AND 200;
+
+SELECT * FROM pedidos WHERE data BETWEEN '2023-01-01' AND '2023-12-31';
+
+SELECT c.nome, p.valor
+FROM pedidos p
+JOIN clientes c ON p.client_id = c.id;
+
+SELECT c.nome, p.valor
+FROM clientes c
+LEFT JOIN pedidos p ON p.client_id = c.id;
+
+SELECT client_id, COUNT(*) AS total_pedidos
+FROM pedidos
+GROUP BY client_id;
+
+SELECT AVG(valor) AS valor_medio FROM pedidos;
+
+SELECT client_id, COUNT(*) AS total_pedidos
+FROM pedidos
+GROUP BY client_id
+HAVING COUNT(*) > 2;
+
+INSERT INTO pedidos (id, client_id, valor, data)
+VALUES (6, 4, 250.00, DATE('now'));
+
+UPDATE clientes SET nome = 'Pedro Henrique' WHERE id = 3;
+
+UPDATE pedidos
+SET valor = valor * 1.10
+WHERE valor > 100;
+
+DELETE FROM pedidos WHERE valor < 100;
+
+DELETE FROM clientes WHERE nome = 'Carlos';
+
+CREATE TABLE IF NOT EXISTS produtos (
+    id INTEGER PRIMARY KEY,
+    nome TEXT,
+    preco REAL
+);
+
+ALTER TABLE clientes ADD COLUMN email TEXT;
+
+DROP VIEW IF EXISTS vw_total_pedidos;
+
+CREATE VIEW vw_total_pedidos AS
+SELECT cliente_id, COUNT(*) AS total_pedidos
+FROM pedidos
+GROUP BY cliente_id;
+
+SELECT AVG(valor) as valor_medio FROM pedidos
+
+SELECT cliente_id, COUNT(*) as total_pedidos FROM pedidos GROUP BY cliente_id HAVING COUNT(*) > 2;
+
+INSERT INTO clientes(id, nome, cidade) VALUES (6, 'Lucas', 'Antonina');
+
+INSERT INT pedidos(id, clientes_id, valor, data) VALUES (7, 6, 100.00, '2023-08-10');
+
+UPDATE clientes SET nome = 'Lucas Silva' WHERE id = 8;
+
+UPDATE pedidos SET valor = valor * 0.10 WHERE valor >= 100;
+
+DELETE FROM pedidos WHERE valor < 100
+
+DELETE FROM pedidos WHERE name = 'Carlos';
+
+CREATE TABLE produtos(
+  id INT PRIMARY KEY,
+  nome VARCHAR(100),
+  preco DECIMAL (10,2)
+);
+
+ALTER TABLE clientes 
+ADD  COLUMN email VARCHAR (100);
+
+CREATE VIEW vw_total_pedidos AS SELECT c.id, c.nome, COUNT(p.id) AS total_pedidos, FROM  clientes c JOIN pedidos p ON c.id = p.cliente_id GROUP BY c.id, c.nome;
